@@ -1,23 +1,26 @@
 # ESP32_MQTTSN_BG95
 
-Biblioteca para comunicação MQTT-SN com módulos **Quectel BG95** em **ESP32**, compatível com **Arduino** e **MicroPython**.
+Library for **MQTT-SN communication** using the **Quectel BG95** module with **ESP32**, compatible with both **Arduino** and **MicroPython**.
 
-## 🚀 Funcionalidades
-- Comunicação serial com o BG95 usando AT Commands.
-- Suporte para conexão a um **broker MQTT-SN**.
-- Publicação e inscrição em tópicos.
-- Suporte para GPS e UDP.
+## 🚀 Features
+- Serial communication with the BG95 using **AT Commands**.
+- Supports **MQTT-SN broker connection**.
+- Publish and subscribe to topics.
+- Includes **GPS and UDP support**.
 
-## 📦 Instalação
+## 📦 Installation
 
-### Para **Arduino**
-1. Baixe ou clone este repositório.
-2. Copie a pasta `ESP32_MQTTSN_BG95` para a pasta `libraries` do Arduino (`~/Documents/Arduino/libraries/`).
-3. Reinicie o Arduino IDE.
+### For **Arduino**
+1. Download or clone this repository.
+2. Copy the `ESP32_MQTTSN_BG95` folder into your **Arduino libraries** folder (`~/Documents/Arduino/libraries/`).
+3. Restart the **Arduino IDE**.
 
-### Para **MicroPython**
-1. Suba o arquivo `ESP32_MQTTSN_BG95.py` para o ESP32 via **Thonny** ou **mpy-cross**.
-2. Importe a biblioteca no seu código:
+### For **MicroPython**
+1. Upload the `MQTTSN_BG95.py` file to your ESP32 using **Thonny** or **mpy-cross**.
+2. Import the library in your code:
 
 ```python
 from MQTTSN_BG95 import MQTTSN_BG95
+
+
+# 📖 Examples
