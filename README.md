@@ -48,10 +48,10 @@ void loop() {
 ### 🟢 Basic Example (MicroPython)
 
 ```python
-from MQTTSN_BG95 import MQTTSN_BG95
+from ESP32_MQTTSN_BG95 import ESP32_MQTTSN_BG95
 import time
 
-mqttsn = MQTTSN_BG95(uart_id=1, baudrate=115200, tx=17, rx=16)
+mqttsn = ESP32_MQTTSN_BG95(uart_id=1, baudrate=115200, tx=17, rx=16)
 mqttsn.connect_apn("1", "internet.apn")
 mqttsn.apn_verify()
 mqttsn.connect_broker("client1", "mqtt.example.com", "1883")
@@ -78,10 +78,10 @@ void loop() {}
 ```
 ### 🟡 Publishing Messages (MicroPython)
 ```python
-from MQTTSN_BG95 import MQTTSN_BG95
+from ESP32_MQTTSN_BG95 import ESP32_MQTTSN_BG95
 import time
 
-mqttsn = MQTTSN_BG95(uart_id=1, baudrate=115200, tx=17, rx=16)
+mqttsn = ESP32_MQTTSN_BG95(uart_id=1, baudrate=115200, tx=17, rx=16)
 mqttsn.connect_apn("1", "internet.apn")
 mqttsn.connect_broker("client1", "mqtt.example.com", "1883")
 mqttsn.publish("Hello, MQTT-SN!", "client1", "test/topic")
@@ -108,10 +108,10 @@ void loop() {}
 ```
 ### 🔵 Subscribing to a Topic (MicroPython)
 ```python
-from MQTTSN_BG95 import MQTTSN_BG95
+from ESP32_MQTTSN_BG95 import ESP32_MQTTSN_BG95
 import time
 
-mqttsn = MQTTSN_BG95(uart_id=1, baudrate=115200, tx=17, rx=16)
+mqttsn = ESP32_MQTTSN_BG95(uart_id=1, baudrate=115200, tx=17, rx=16)
 mqttsn.connect_apn("1", "internet.apn")
 mqttsn.connect_broker("client1", "mqtt.example.com", "1883")
 mqttsn.subscribe("client1", "1", "test/topic", "0")
