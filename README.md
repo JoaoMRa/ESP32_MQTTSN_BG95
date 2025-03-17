@@ -25,7 +25,7 @@ from MQTTSN_BG95 import MQTTSN_BG95
 ## 📖 Usage Examples
 ### 🟢 Basic Example (Arduino)
 
-```arduino
+```c++
 #include "ESP32_MQTTSN_BG95.h"
 
 HardwareSerial bg95Serial(1);
@@ -60,7 +60,7 @@ while True:
     time.sleep(5)
 ```
 ### 🟡 Publishing Messages (Arduino)
-```arduino
+```c++
 #include "ESP32_MQTTSN_BG95.h"
 
 HardwareSerial bg95Serial(1);
@@ -90,7 +90,7 @@ while True:
     time.sleep(5)
 ```
 ### 🔵 Subscribing to a Topic (Arduino)
-```arduino
+```c++
 #include "ESP32_MQTTSN_BG95.h"
 
 HardwareSerial bg95Serial(1);
