@@ -20,7 +20,7 @@ Library for **MQTT-SN communication** using the **Quectel BG95** module with **E
 2. Import the library in your code:
 
 ```python
-from MQTTSN_BG95 import MQTTSN_BG95
+from ESP32_MQTTSN_BG95 import ESP32_MQTTSN_BG95
 ```
 ## 📖 Usage Examples
 ### 🟢 Basic Example (Arduino)
