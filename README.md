@@ -143,9 +143,3 @@ This project is licensed under the MIT License - see the LICENSE.md file for det
 ### 🔗 GitHub Repository: ESP32_MQTTSN_BG95
 
 ### ✉️ Maintainer: João Moreira
-
-=======
-
-
-# 📖 Examples
->>>>>>> f224e999289b697d9578c2a41fd317e18a329757
