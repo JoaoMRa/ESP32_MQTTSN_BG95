@@ -21,7 +21,6 @@ Library for **MQTT-SN communication** using the **Quectel BG95** module with **E
 
 ```python
 from MQTTSN_BG95 import MQTTSN_BG95
-<<<<<<< HEAD
 ```
 ## 📖 Usage Examples
 ### 🟢 Basic Example (Arduino)
