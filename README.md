@@ -134,7 +134,7 @@ while True:
 | `AT+QGPS=1`            | Enable GPS                                                                      |
 | `AT+QGPSEND`           | Disable GPS                                                                     |
 | `AT+QGPSLOC?`          | Get GPS coordinates                                                             |
-| `AT+QMTSNSLEEP=` | Set MQTT-SN sleep mode: `0` - Asleep state, `1` - Awake state, `2` - Active state |
+| `AT+QMTSNSLEEP=<...>` | Set MQTT-SN sleep mode: `0` - Asleep state, `1` - Awake state, `2` - Active state |
 
 
 
