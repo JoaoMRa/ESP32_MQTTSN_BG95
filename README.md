@@ -123,17 +123,18 @@ while True:
 
 ## 🛠 AT Commands Reference
 
-| **Command**          | **Description**                                      |
-|----------------------|------------------------------------------------------|
-| `AT+CGDCONT?`        | Verify APN connection                                |
-| `AT+QMTSNOPEN?`      | Verify MQTT-SN broker connection                     |
-| `AT+QMTCONN?`        | Check MQTT-SN session status                         |
-| `AT+QMTPUB=`         | Publish a message to a topic                         |
-| `AT+QMTSNSUB=`       | Subscribe to a topic                                 |
-| `AT+QMTSNUNS=`       | Unsubscribe from a topic                             |
-| `AT+QGPS=1`          | Enable GPS                                           |
-| `AT+QGPSEND`         | Disable GPS                                          |
-| `AT+QGPSLOC?`        | Get GPS coordinates                                  |
+| **Command**          | **Description**                                             |
+|----------------------|-------------------------------------------------------------|
+| `AT+CGDCONT?`        | Verify APN connection                                       |
+| `AT+QMTSNOPEN?`      | Verify MQTT-SN broker connection                            |
+| `AT+QMTCONN?`        | Check MQTT-SN session status                                |
+| `AT+QMTPUB=`         | Publish a message to a topic                                |
+| `AT+QMTSNSUB=`       | Subscribe to a topic                                        |
+| `AT+QMTSNUNS=`       | Unsubscribe from a topic                                    |
+| `AT+QGPS=1`          | Enable GPS                                                  |
+| `AT+QGPSEND`         | Disable GPS                                                 |
+| `AT+QGPSLOC?`        | Get GPS coordinates                                         |
+| `AT+QMTSNSLEEP=`     | Mode: 0 - Asleep state  | 1 - Awake state 2 - Active state  |
 
 
 ## ⚖ License
