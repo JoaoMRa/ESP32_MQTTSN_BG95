@@ -1,7 +1,7 @@
 import machine
 import time
 
-class MQTTSN_BG95:
+class ESP32_MQTTSN_BG95:
     def __init__(self, uart_id=1, baudrate=115200, tx=17, rx=16):
         self.uart = machine.UART(uart_id, baudrate=baudrate, tx=tx, rx=rx)
         self.uart.init(baudrate, bits=8, parity=None, stop=1)
