@@ -16,7 +16,7 @@ Library for **MQTT-SN communication** using the **Quectel BG95** module with **E
 3. Restart the **Arduino IDE**.
 
 ### For **MicroPython**
-1. Upload the `MQTTSN_BG95.py` file to your ESP32 using **Thonny** or **mpy-cross**.
+1. Upload the `ESP32_MQTTSN_BG95.py` file to your ESP32 using **Thonny** or **mpy-cross**.
 2. Import the library in your code:
 
 ```python
