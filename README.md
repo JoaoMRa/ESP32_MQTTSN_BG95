@@ -146,4 +146,4 @@ This project is licensed under the MIT License - see the LICENSE.md file for det
 
 ### ✉️ Maintainer: João Moreira
 
-### 🔗 MQTT-SN BG95: [BG95]https://sixfab.com/wp-content/uploads/2023/05/Quectel_BG95BG77BG600L_Series_MQTT-SN_Application_Note_V1.0.pdf
+### 🔗 MQTT-SN BG95: https://sixfab.com/wp-content/uploads/2023/05/Quectel_BG95BG77BG600L_Series_MQTT-SN_Application_Note_V1.0.pdf
