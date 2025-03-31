@@ -2,11 +2,11 @@ import machine
 import time
 
 class ESP32_MQTTSN_BG95:
-    def __init__(self, uart_id=1, baudrate=115200, tx=17, rx=16):
-        self.uart = machine.UART(uart_id, baudrate=baudrate, tx=tx, rx=rx)
+    def __init__(self, uart_id=2, baudrate=115200):
+        self.uart = machine.UART(uart_id, baudrate=baudrate)
         self.uart.init(baudrate, bits=8, parity=None, stop=1)
 
-    def send_at_command(self, command, timeout=2000):
+    def send_at_command(self, command, timeout=5000):
         self.uart.write(command + "\r\n")
         time.sleep_ms(100)
         
@@ -60,7 +60,7 @@ class ESP32_MQTTSN_BG95:
         self.send_at_command("AT+QGPSLOC?")
 
     def publish(self, message, client_id, topic, msg_id, qos, retain, msglen):
-        self.send_at_command(f'AT+QMTPUB={client_id},{msg_id},{qos},{retain},"{topic}",{msglen}')
+        self.send_at_command(f'AT+QMTSNPUB={client_id},{msg_id},{qos},{retain},"{topic}",{msglen}')
         self.uart.write(message + "\r\n")
 
     def subscribe(self, client_id, msg_id, topic, qos):
@@ -80,3 +80,4 @@ class ESP32_MQTTSN_BG95:
             self.send_at_command(f"AT+QMTSNSLEEP={client_id},{mode},{duration}")
         else:
             self.send_at_command(f"AT+QMTSNSLEEP={client_id},{mode}")
+
