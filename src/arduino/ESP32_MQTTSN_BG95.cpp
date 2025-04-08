@@ -34,6 +34,58 @@ void ESP32_MQTTSN_BG95::ApnVerify() {
     sendATCommand("AT+CGDCONT?");
 }
 
+void ESP32_MQTTSN_BG95::ConfIOT(String Id, String apn){
+    sendATCommand("AT+CGDCONT=" + Id + ",\"IP\",\"" + apn + "\"");
+    sendATCommand("AT+CFUN=0");
+    sendATCommand("AT+QCFG=\"nwscanmode\",3,1");
+    sendATCommand("AT+QCFG=\"nwscanseq\",00,1");
+    sendATCommand("AT+QCFG=\"band\",0,0,0x80000,1");
+    sendATCommand("AT+QCFG=\"iotopmode\",1,1");
+    sendATCommand("AT+CFUN=1");
+    sendATCommand("ATE0");
+    sendATCommand("AT+COPS=1,2,\"26803\",9");
+    sendATCommand("AT+QNWINFO");
+    delay(1000);
+}
+
+bool ESP32_MQTTSN_BG95::waitForGPSFix(unsigned long timeout_ms) {
+    unsigned long start = millis();
+    while (millis() - start < timeout_ms) {
+        String response = sendATCommand("AT+QGPSLOC?");
+        if (response.indexOf("+QGPSLOC:") != -1 && response.indexOf("516") == -1) {
+            Serial.println("GPS fix recebido!");
+            return true;
+        }
+        delay(2000);  // espera 2 segundos antes de tentar de novo
+    }
+    Serial.println("Timeout esperando fix do GPS");
+    return false;
+}
+
+void ESP32_MQTTSN_BG95::ConfNTN(String Id, String apn){
+
+    sendATCommand("at+cfun=0");
+    sendATCommand("at+qcfg=\"band\",0,80000,80000,2,1");
+    sendATCommand("at+qcfg=\"iotopmode\",3,1");
+    sendATCommand("at+qcfg=\"nwscanmode\",3,1");
+    sendATCommand("at+qcfg=\"dbgctl\",0  ");
+    sendATCommand("at+cmee=2");
+    sendATCommand("at+qgps=1");
+    sendATCommand("at+qgpsloc?");
+    waitForGPSFix(60000);
+    sendATCommand("at+qgpsend");
+    sendATCommand("AT+CGDCONT=" + Id + ",\"IP\",\"" + apn + "\"");
+    sendATCommand("at+cfun=1");
+    sendATCommand("at+cereg=4");
+    sendATCommand("at+qeng=\"servingcell\"");
+    sendATCommand("at+qnwinfo");
+    sendATCommand("at+cops?");
+    sendATCommand("at+qiact=1");
+    sendATCommand("at+qiact?");
+  
+}
+
+
 // Conectar ao Broker MQTT-SN
 void ESP32_MQTTSN_BG95::ConnectBroker(String clientId, String broker, String port) {
     this->clientId = clientId;

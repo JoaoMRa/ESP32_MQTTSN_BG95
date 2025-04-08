@@ -26,6 +26,10 @@ class ESP32_MQTTSN_BG95 {
     
     void ConnectApn(String Id, String apn);
     void ApnVerify();
+    bool waitForGPSFix(unsigned long timeout_ms);
+    void ConfNTN(String Id, String apn);
+
+    void ConfIOT(String Id, String apn);
 
     void ConnectBroker(String clientId, String broker, String port);
     void BrokerVerify();
