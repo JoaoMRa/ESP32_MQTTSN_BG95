@@ -28,6 +28,53 @@ class ESP32_MQTTSN_BG95:
     def apn_verify(self):
         self.send_at_command("AT+CGDCONT?")
 
+    def wait_for_gps_fix(self,timeout_ms):
+        t_start = time.ticks_ms()
+        while time.ticks_diff(time.ticks_ms(), t_start) < timeout_ms:
+            resp = self.send_at_command('AT+QGPSLOC?')
+            if '+QGPSLOC:' in resp and '516' not in resp:
+                print("GPS fix recebido!")
+                return True
+            time.sleep(2)
+        print("Timeout esperando fix do GPS")
+        return False
+
+    def conf_iot(self,id, apn):
+        self.send_at_command(f'AT+CGDCONT={id},"IP","{apn}"')
+        self.send_at_command('AT+CFUN=0')
+        self.send_at_command('AT+QCFG="nwscanmode",3,1')
+        self.send_at_command('AT+QCFG="nwscanseq",00,1')
+        self.send_at_command('AT+QCFG="band",0,0,0x80000,1')
+        self.send_at_command('AT+QCFG="iotopmode",1,1')
+        self.send_at_command('AT+CFUN=1')
+        self.send_at_command('ATE0')
+        self.send_at_command('AT+COPS=1,2,"26803",9')
+        self.send_at_command('AT+QNWINFO')
+        time.sleep(1)
+
+    def conf_ntn(self,id, apn):
+        self.send_at_command('AT+CFUN=0')
+        self.send_at_command('at+qcfg="band",0,80000,80000,2,1')  # Confirme os valores de banda
+        self.send_at_command('AT+QCFG="iotopmode",3,1')
+        self.send_at_command('AT+QCFG="nwscanmode",3,1')
+        self.send_at_command('AT+QCFG="dbgctl",0')
+        self.send_at_command('AT+CMEE=2')
+        self.send_at_command('AT+QGPS=1')
+
+        self.wait_for_gps_fix(60000)  # espera até 60s por fix
+
+        self.send_at_command('AT+QGPSEND')
+        self.send_at_command(f'AT+CGDCONT={id},"IP","{apn}"')
+        self.send_at_command('AT+CFUN=1')
+        self.send_at_command('AT+CEREG=4')
+        self.send_at_command('AT+QENG="servingcell"')
+        self.send_at_command('AT+QNWINFO')
+        self.send_at_command('AT+COPS?')
+        self.send_at_command('AT+QIACT=1')
+        self.send_at_command('AT+QIACT?')
+
+
+
     def connect_broker(self, client_id, broker, port):
         self.send_at_command(f'AT+QMTSNOPEN={client_id},"{broker}",{port},"clientid"')
 
