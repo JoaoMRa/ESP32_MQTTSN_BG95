@@ -16,17 +16,16 @@ Library for **MQTT-SN communication** using the **Quectel BG95** module with **E
 3. Restart the **Arduino IDE**.
 
 ### For **MicroPython**
-1. Upload the `MQTTSN_BG95.py` file to your ESP32 using **Thonny** or **mpy-cross**.
+1. Upload the `ESP32_MQTTSN_BG95.py` file to your ESP32 using **Thonny** or **mpy-cross**.
 2. Import the library in your code:
 
 ```python
-from MQTTSN_BG95 import MQTTSN_BG95
-<<<<<<< HEAD
+from ESP32_MQTTSN_BG95 import ESP32_MQTTSN_BG95
 ```
 ## 📖 Usage Examples
 ### 🟢 Basic Example (Arduino)
 
-```arduino
+```c++
 #include "ESP32_MQTTSN_BG95.h"
 
 HardwareSerial bg95Serial(1);
@@ -49,10 +48,10 @@ void loop() {
 ### 🟢 Basic Example (MicroPython)
 
 ```python
-from MQTTSN_BG95 import MQTTSN_BG95
+from ESP32_MQTTSN_BG95 import ESP32_MQTTSN_BG95
 import time
 
-mqttsn = MQTTSN_BG95(uart_id=1, baudrate=115200, tx=17, rx=16)
+mqttsn = ESP32_MQTTSN_BG95(uart_id=1, baudrate=115200, tx=17, rx=16)
 mqttsn.connect_apn("1", "internet.apn")
 mqttsn.apn_verify()
 mqttsn.connect_broker("client1", "mqtt.example.com", "1883")
@@ -61,7 +60,7 @@ while True:
     time.sleep(5)
 ```
 ### 🟡 Publishing Messages (Arduino)
-```arduino
+```c++
 #include "ESP32_MQTTSN_BG95.h"
 
 HardwareSerial bg95Serial(1);
@@ -79,10 +78,10 @@ void loop() {}
 ```
 ### 🟡 Publishing Messages (MicroPython)
 ```python
-from MQTTSN_BG95 import MQTTSN_BG95
+from ESP32_MQTTSN_BG95 import ESP32_MQTTSN_BG95
 import time
 
-mqttsn = MQTTSN_BG95(uart_id=1, baudrate=115200, tx=17, rx=16)
+mqttsn = ESP32_MQTTSN_BG95(uart_id=1, baudrate=115200, tx=17, rx=16)
 mqttsn.connect_apn("1", "internet.apn")
 mqttsn.connect_broker("client1", "mqtt.example.com", "1883")
 mqttsn.publish("Hello, MQTT-SN!", "client1", "test/topic")
@@ -91,7 +90,7 @@ while True:
     time.sleep(5)
 ```
 ### 🔵 Subscribing to a Topic (Arduino)
-```arduino
+```c++
 #include "ESP32_MQTTSN_BG95.h"
 
 HardwareSerial bg95Serial(1);
@@ -109,10 +108,10 @@ void loop() {}
 ```
 ### 🔵 Subscribing to a Topic (MicroPython)
 ```python
-from MQTTSN_BG95 import MQTTSN_BG95
+from ESP32_MQTTSN_BG95 import ESP32_MQTTSN_BG95
 import time
 
-mqttsn = MQTTSN_BG95(uart_id=1, baudrate=115200, tx=17, rx=16)
+mqttsn = ESP32_MQTTSN_BG95(uart_id=1, baudrate=115200, tx=17, rx=16)
 mqttsn.connect_apn("1", "internet.apn")
 mqttsn.connect_broker("client1", "mqtt.example.com", "1883")
 mqttsn.subscribe("client1", "1", "test/topic", "0")
@@ -124,17 +123,20 @@ while True:
 
 ## 🛠 AT Commands Reference
 
-| **Command**          | **Description**                                      |
-|----------------------|------------------------------------------------------|
-| `AT+CGDCONT?`        | Verify APN connection                                |
-| `AT+QMTSNOPEN?`      | Verify MQTT-SN broker connection                     |
-| `AT+QMTCONN?`        | Check MQTT-SN session status                         |
-| `AT+QMTPUB=`         | Publish a message to a topic                         |
-| `AT+QMTSNSUB=`       | Subscribe to a topic                                 |
-| `AT+QMTSNUNS=`       | Unsubscribe from a topic                             |
-| `AT+QGPS=1`          | Enable GPS                                           |
-| `AT+QGPSEND`         | Disable GPS                                          |
-| `AT+QGPSLOC?`        | Get GPS coordinates                                  |
+| **Command**            | **Description**                                                                 |
+|------------------------|---------------------------------------------------------------------------------|
+| `AT+CGDCONT?`          | Verify APN connection                                                           |
+| `AT+QMTSNOPEN?`        | Verify MQTT-SN broker connection                                                |
+| `AT+QMTCONN?`          | Check MQTT-SN session status                                                    |
+| `AT+QMTPUB=<...>`      | Publish a message to a topic                                                    |
+| `AT+QMTSNSUB=<...>`    | Subscribe to a topic                                                            |
+| `AT+QMTSNUNS=<...>`    | Unsubscribe from a topic                                                        |
+| `AT+QGPS=1`            | Enable GPS                                                                      |
+| `AT+QGPSEND`           | Disable GPS                                                                     |
+| `AT+QGPSLOC?`          | Get GPS coordinates                                                             |
+| `AT+QMTSNSLEEP=<...>` | Set MQTT-SN sleep mode: `0` - Asleep state, `1` - Awake state, `2` - Active state |
+
+
 
 
 ## ⚖ License
@@ -143,3 +145,5 @@ This project is licensed under the MIT License - see the LICENSE.md file for det
 ### 🔗 GitHub Repository: ESP32_MQTTSN_BG95
 
 ### ✉️ Maintainer: João Moreira
+
+### 🔗 MQTT-SN BG95: https://sixfab.com/wp-content/uploads/2023/05/Quectel_BG95BG77BG600L_Series_MQTT-SN_Application_Note_V1.0.pdf

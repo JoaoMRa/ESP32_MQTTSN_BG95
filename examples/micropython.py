@@ -1,7 +1,7 @@
-from MQTTSN_BG95 import MQTTSN_BG95
+from ESP32_MQTTSN_BG95 import ESP32_MQTTSN_BG95
 import time
 
-mqttsn = MQTTSN_BG95(uart_id=1, baudrate=115200, tx=17, rx=16)
+mqttsn = ESP32_MQTTSN_BG95(uart_id=1, baudrate=115200, tx=17, rx=16)
 
 mqttsn.connect_apn("1", "internet.apn")
 mqttsn.apn_verify()

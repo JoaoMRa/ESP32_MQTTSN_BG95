@@ -23,13 +23,13 @@ String ESP32_MQTTSN_BG95::sendATCommand(const String &command, unsigned long tim
     return response;
 }
 
-// Conectar à APN
+// Connect Apn
 void ESP32_MQTTSN_BG95::ConnectApn(String Id, String apn) {
     sendATCommand("AT+CGDCONT=" + Id + ",\"IP\",\"" + apn + "\"");
     delay(1000);
 }
 
-// Verificar conexão à APN
+// Show Apn state
 void ESP32_MQTTSN_BG95::ApnVerify() {
     sendATCommand("AT+CGDCONT?");
 }
@@ -95,87 +95,87 @@ void ESP32_MQTTSN_BG95::ConnectBroker(String clientId, String broker, String por
     delay(1000);
 }
 
-// Verificar conexão com o Broker
+//Show MQTT-SN Broker state
 void ESP32_MQTTSN_BG95::BrokerVerify() {
     sendATCommand("AT+QMTSNOPEN?");
 }
 
-// Fechar conexão com o Broker
+// Close MQTT-SN Broker 
 void ESP32_MQTTSN_BG95::CloseBroker() {
     sendATCommand("AT+QMTSNCLOSE=0");
 }
 
-// Conectar ao MQTT-SN
+// Connect to MQTT-SN
 void ESP32_MQTTSN_BG95::connectMQTTSN(String clientId, String user, String pass) {
     this->user = user;
     this->pass = pass;
     sendATCommand("AT+QMTCONN=\"" + clientId + "\",\"" + user + "\",\"" + pass + "\"");
 }
 
-// Verificar conexão MQTT-SN
+// show MQTT-SN state
 void ESP32_MQTTSN_BG95::MQTTSNVerify() {
     sendATCommand("AT+QMTCONN?");
 }
 
-// Fechar conexão MQTT-SN
+// Close MQTT-SN connection
 void ESP32_MQTTSN_BG95::CloseMQTTSN(String clientId) {
     sendATCommand("AT+QMTDISC=" + clientId);
 }
 
-// Ativar UDP
+// UDP enable
 void ESP32_MQTTSN_BG95::AtivateUdp() {
     sendATCommand("AT+CGACT=1,1");
     sendATCommand("AT+QMTSNCFG=\"dtls\",0,0");
 }
 
-// Ativar GPS
+// GPS enable
 void ESP32_MQTTSN_BG95::ActivateGps() {
     sendATCommand("AT+QGPS=1");
 }
 
-// Desativar GPS
+// GPS disable
 void ESP32_MQTTSN_BG95::DesactivateGps() {
     sendATCommand("AT+QGPSEND");
 }
 
-// Obter coordenadas do GPS
+// GPS coordinates
 void ESP32_MQTTSN_BG95::GpsCordinates() {
     sendATCommand("AT+QGPSLOC?");
 }
 
-// Publicar mensagem no MQTT-SN
+// MQTT-SN publish
 void ESP32_MQTTSN_BG95::publish(String message, String clientId, String topic, String msgId, String qos, String retain, String msglen) {
-    sendATCommand("AT+QMTPUB=" + clientId + "," + msgId + "," + qos + "," + retain + ",\"" + topic + "\"," + msglen);
+    sendATCommand("AT+QMTSNPUB=" + clientId + "," + msgId + "," + qos + "," + retain + ",\"" + topic + "\"," + msglen);
     bg95Serial.println(message);
     bg95Serial.println("");  // Enviar mensagem
 }
 
-// Inscrever-se em um tópico MQTT-SN
+// Subscrive MQTT-SN topic
 void ESP32_MQTTSN_BG95::Subscribe(String clientId, String msgId, String topic, String qos) {
     sendATCommand("AT+QMTSNSUB=" + clientId + "," + msgId + ",\"" + topic + "\"," + qos);
 }
 
-// Cancelar inscrição em um tópico MQTT-SN
+// Unsubscive MQTT-SN topic
 void ESP32_MQTTSN_BG95::Unsubscribe(String clientId, String msgId, String topic) {
     sendATCommand("AT+QMTSNUNS=" + clientId + "," + msgId + ",\"" + topic + "\"");
 }
 
-// Solicitar ID do Tópico MQTT-SN
+// Request topic ID 
 void ESP32_MQTTSN_BG95::RequestTopicId() {
     sendATCommand("AT+QMTSNREG?");
 }
 
-// Atualizar mensagem de "Will"
+// Update "Will" message
 void ESP32_MQTTSN_BG95::WillUpd() {
     sendATCommand("AT+QMTSNWILLUPD=" + clientId + "," + will_qos + "," + will_retain + ",\"" + will_topic + "\",\"" + will_message + "\"");
 }
 
-// Mudar o modo do módulo (1 ou 2)
+// change Module mode (1 or 2)
 void ESP32_MQTTSN_BG95::ModuleMode1or2(String clientId, String mode) {
     sendATCommand("AT+QMTSNSLEEP=" + clientId + "," + mode);
 }
 
-// Mudar o modo do módulo para 0 com duração
+// change Module mode to 0 with duration
 void ESP32_MQTTSN_BG95::ModuleMode0(String clientId, String mode, String duration) {
     sendATCommand("AT+QMTSNSLEEP=" + clientId + "," + mode + "," + duration);
 }
