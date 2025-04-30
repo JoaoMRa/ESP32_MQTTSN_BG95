@@ -72,6 +72,7 @@ class ESP32_MQTTSN_BG95:
         self.send_at_command('AT+COPS?')
         self.send_at_command('AT+QIACT=1')
         self.send_at_command('AT+QIACT?')
+        self.send_at_command('AT+QMTSNCFG="timeout",1,60,3,1')
 
 
 
