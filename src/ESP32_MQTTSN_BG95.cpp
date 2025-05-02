@@ -88,11 +88,11 @@ void ESP32_MQTTSN_BG95::ConfNTN(String Id, String apn){
 
 
 // Conectar ao Broker MQTT-SN
-void ESP32_MQTTSN_BG95::ConnectBroker(String clientId, String broker, String port) {
+void ESP32_MQTTSN_BG95::ConnectBroker(String clientId, String broker, String port, String client_name) {
     this->clientId = clientId;
     this->broker = broker;
     this->port = port;
-    sendATCommand("AT+QMTSNOPEN=" + clientId + ",\"" + broker + "\"," + port + ",\"clientid\"");
+    sendATCommand("AT+QMTSNOPEN=" + clientId + ",\"" + broker + "\"," + port + ",\"" + client_name + "\"");
     delay(1000);
 }
 

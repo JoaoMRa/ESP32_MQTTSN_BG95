@@ -76,8 +76,8 @@ class ESP32_MQTTSN_BG95:
 
 
 
-    def connect_broker(self, client_id, broker, port):
-        self.send_at_command(f'AT+QMTSNOPEN={client_id},"{broker}",{port},"clientid"')
+    def connect_broker(self, client_id, broker, client_name, port):
+        self.send_at_command(f'AT+QMTSNOPEN={client_id},"{broker}",{port},"{client_name}"')
 
     def broker_verify(self):
         self.send_at_command("AT+QMTSNOPEN?")

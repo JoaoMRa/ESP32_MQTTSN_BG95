@@ -31,7 +31,7 @@ class ESP32_MQTTSN_BG95 {
 
     void ConfIOT(String Id, String apn);
 
-    void ConnectBroker(String clientId, String broker, String port);
+    void ConnectBroker(String clientId, String broker, String port, String client_name);
     void BrokerVerify();
     void CloseBroker();
     
