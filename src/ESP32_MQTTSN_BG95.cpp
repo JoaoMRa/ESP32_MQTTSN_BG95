@@ -180,3 +180,32 @@ void ESP32_MQTTSN_BG95::ModuleMode1or2(String clientId, String mode) {
 void ESP32_MQTTSN_BG95::ModuleMode0(String clientId, String mode, String duration) {
     sendATCommand("AT+QMTSNSLEEP=" + clientId + "," + mode + "," + duration);
 }
+
+bool ESP32_MQTTSN_BG95::check_command(String command, String result, uint32_t wait){
+    String response = sendATCommand(command,2000);
+    unit32_t timeout = millis() + wait;
+    bool expect_response = false;
+
+    while(millis() <= timeout){
+        #ifdef DEBUG_BG95_HIGH
+            log("<< " + response);
+        #endif
+
+        parse_command_line(response);
+
+        if (response == result)
+        {
+            expect_response = true;
+            break;
+        }
+
+        if (response == "ERROR")
+        {
+            break;
+        }
+        
+        delay(2000);
+        
+    }
+    return expect_response;
+}

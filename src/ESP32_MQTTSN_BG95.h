@@ -52,6 +52,9 @@ class ESP32_MQTTSN_BG95 {
     void WillUpd();
     void ModuleMode1or2(String clientId, String mode);
     void ModuleMode0(String clientId, String mode, String duration);
+
+    bool check_command(String command, String result, uint32_t wait);
+      
 };
 
 #endif

@@ -129,3 +129,37 @@ class ESP32_MQTTSN_BG95:
         else:
             self.send_at_command(f"AT+QMTSNSLEEP={client_id},{mode}")
 
+
+
+def check_command(uart, command, expected_result, wait_ms):
+    msg = send_at_command(command, 2000)
+    def log(msg):
+        print("<<", msg)
+
+    def parse_command_line(line):
+        # Placeholder para tratamento ou parsing da resposta
+        pass
+
+    uart.write((command + '\r\n').encode())
+
+    timeout_time = time.ticks_add(time.ticks_ms(), wait_ms)
+    expect_response = False
+
+    while time.ticks_diff(timeout_time, time.ticks_ms()) > 0:
+        if uart.any():
+            response = uart.readline()
+            if response:
+                response = response.decode().strip()
+                log(response)
+                parse_command_line(response)
+
+                if response == expected_result:
+                    expect_response = True
+                    break
+
+                if response == "ERROR":
+                    break
+
+        time.sleep_ms(100)  # Pequeno delay para evitar busy-wait
+
+    return expect_response
