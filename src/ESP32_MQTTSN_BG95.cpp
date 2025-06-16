@@ -82,7 +82,7 @@ void ESP32_MQTTSN_BG95::ConfNTN(String Id, String apn){
     sendATCommand("at+cops?");
     sendATCommand("at+qiact=1");
     sendATCommand("at+qiact?");
-    sendATCommand("AT+QMTSNCFG=\"timeout\",1,60,3,1")
+    sendATCommand("AT+QMTSNCFG=\"timeout\",1,60,3,1");
   
 }
 
