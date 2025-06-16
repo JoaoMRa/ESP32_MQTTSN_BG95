@@ -183,7 +183,7 @@ void ESP32_MQTTSN_BG95::ModuleMode0(String clientId, String mode, String duratio
 
 bool ESP32_MQTTSN_BG95::check_command(String command, String result, uint32_t wait){
     String response = sendATCommand(command,2000);
-    unit32_t timeout = millis() + wait;
+    uint32_t timeout = millis() + wait;
     bool expect_response = false;
 
     while(millis() <= timeout){
