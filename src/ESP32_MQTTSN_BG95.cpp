@@ -165,6 +165,9 @@ void ESP32_MQTTSN_BG95::Unsubscribe(String clientId, String msgId, String topic)
 void ESP32_MQTTSN_BG95::RequestTopicId() {
     sendATCommand("AT+QMTSNREG?");
 }
+void ESP32_MQTTSN_BG95::RegTopic(String clientId, String msgId, String topic){
+    sendATCommand("AT+QMTSNREG="+ clientId + ","+ msgId +",\""+ topic+ "\"");
+}
 
 // Update "Will" message
 void ESP32_MQTTSN_BG95::WillUpd() {
