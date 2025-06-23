@@ -230,7 +230,7 @@ bool ESP32_MQTTSN_BG95::check_command(String command, String result, uint32_t wa
     return expect_response;
 }
 
-bool waitForResponse(String expected, unsigned long timeout = 5000) {
+bool ESP32_MQTTSN_BG95::waitForResponse(String expected, unsigned long timeout = 5000) {
   unsigned long startTime = millis();
   String response = "";
 
