@@ -23,7 +23,8 @@ class ESP32_MQTTSN_BG95 {
     ESP32_MQTTSN_BG95(HardwareSerial& serial);
 
     void configSerial(int baudrate, HardwareSerial& name, int Rx, int Tx);
-    String sendATCommand(const String &command, unsigned long timeout = 2000);
+    String sendATCommand(const String &command, const String &payload, unsigned long timeout = 2000);
+
     void ConnectApn(String Id, String apn);
     void ApnVerify();
     bool waitForGPSFix(unsigned long timeout_ms);
