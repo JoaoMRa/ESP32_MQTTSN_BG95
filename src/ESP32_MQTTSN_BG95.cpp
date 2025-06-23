@@ -9,7 +9,8 @@ void ESP32_MQTTSN_BG95::configSerial(int baudrate, HardwareSerial& name, int Rx,
 //Send AT Commands
 String ESP32_MQTTSN_BG95::sendATCommand(const String &command, unsigned long timeout) {
     String response = "";
-    bg95Serial.println(command);
+    bg95Serial.print(command);   // envia o comando
+    bg95Serial.print("\r");
     unsigned long start = millis();
 
     while (millis() - start < timeout) {
