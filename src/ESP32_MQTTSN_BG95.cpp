@@ -229,3 +229,28 @@ bool ESP32_MQTTSN_BG95::check_command(String command, String result, uint32_t wa
     }
     return expect_response;
 }
+
+bool waitForResponse(String expected, unsigned long timeout = 5000) {
+  unsigned long startTime = millis();
+  String response = "";
+
+  while (millis() - startTime < timeout) {
+    while (bg95Serial.available()) {
+      char c = bg95Serial.read();
+      response += c;
+
+      // Opcional: mostrar resposta parcial
+      Serial.print(c);
+
+      // Verifica se a resposta esperada foi recebida
+      if (response.indexOf(expected) != -1) {
+        Serial.println("\nResposta esperada recebida: " + expected);
+        return true;
+      }
+    }
+  }
+
+  Serial.println("\nTimeout à espera de: " + expected);
+  return false;
+}
+
