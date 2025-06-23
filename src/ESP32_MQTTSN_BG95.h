@@ -48,6 +48,7 @@ class ESP32_MQTTSN_BG95 {
     void Subscribe(String clientId, String msgId, String topic, String qos);
     void Unsubscribe(String clientId, String msgId, String topic);
     void RequestTopicId();
+    void RegTopic(String clientId, String msgId, String topic);
     
     void WillUpd();
     void ModuleMode1or2(String clientId, String mode);
