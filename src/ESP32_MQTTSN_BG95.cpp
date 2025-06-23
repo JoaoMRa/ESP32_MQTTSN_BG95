@@ -27,44 +27,16 @@ String ESP32_MQTTSN_BG95::sendATCommand(const String &command, unsigned long tim
 String ESP32_MQTTSN_BG95::sendATCommand(const String &command, const String &payload, unsigned long timeout) {
     String response = "";
 
-    // Envia o comando AT
     bg95Serial.print(command);
     bg95Serial.print("\r");
 
+    delay(100); // Pequena espera para o módulo aceitar o payload
+
+    // Enviar o payload
+    bg95Serial.print(payload);
+    bg95Serial.write(0x1A); // Envia Ctrl+Z
+
     unsigned long start = millis();
-    bool gotPrompt = false;
-
-    // Espera por resposta ou prompt
-    while (millis() - start < timeout) {
-        while (bg95Serial.available()) {
-            char c = (char)bg95Serial.read();
-            response += c;
-
-            // Detecta prompt '>' (módulo pronto para receber a mensagem)
-            if (c == '>') {
-                gotPrompt = true;
-                break;
-            }
-
-            // Detecta erro imediato
-            if (response.indexOf("ERROR") != -1) {
-                Serial.println("Comando: " + command);
-                Serial.println("Resposta: " + response);
-                return response;
-            }
-        }
-
-        if (gotPrompt) break;
-    }
-
-    // Se recebeu o prompt, envia o payload
-    if (gotPrompt) {
-        bg95Serial.print(payload);
-        bg95Serial.print("\r");  // ou \r\n conforme documentação
-    }
-
-    // Espera pela resposta final
-    start = millis();
     while (millis() - start < timeout) {
         while (bg95Serial.available()) {
             response += (char)bg95Serial.read();
@@ -72,9 +44,12 @@ String ESP32_MQTTSN_BG95::sendATCommand(const String &command, const String &pay
     }
 
     Serial.println("Comando: " + command);
+    Serial.println("Payload: " + payload);
     Serial.println("Resposta: " + response);
+
     return response;
 }
+
 
 // Connect Apn
 void ESP32_MQTTSN_BG95::ConnectApn(String Id, String apn) {
