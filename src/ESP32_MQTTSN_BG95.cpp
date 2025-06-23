@@ -145,10 +145,12 @@ void ESP32_MQTTSN_BG95::GpsCordinates() {
 }
 
 // MQTT-SN publish
-void ESP32_MQTTSN_BG95::publish(String message, String clientId, String topic, String msgId, String qos, String retain, String msglen) {
-    sendATCommand("AT+QMTSNPUB=" + clientId + "," + msgId + "," + qos + "," + retain + ",\"" + topic + "\"," + msglen);
+void ESP32_MQTTSN_BG95::publish(String message, String clientId, String topic, String msgId, String qos, String retain) {
+    int msglen = message.length();  // Calcula o comprimento da mensagem
+
+    sendATCommand("AT+QMTSNPUB=" + clientId + "," + msgId + "," + qos + "," + retain + ",\"" + topic + "\"," + String(msglen));
     bg95Serial.println(message);
-    bg95Serial.println("");  // Enviar mensagem
+    bg95Serial.println("");  // Finaliza a mensagem
 }
 
 // Subscrive MQTT-SN topic
