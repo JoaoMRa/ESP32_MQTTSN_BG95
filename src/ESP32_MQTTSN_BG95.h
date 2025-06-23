@@ -17,13 +17,13 @@ class ESP32_MQTTSN_BG95 {
     String will_topic;
     String will_message;
 
-    String sendATCommand(const String &command, unsigned long timeout = 2000);
+    
 
   public:
     ESP32_MQTTSN_BG95(HardwareSerial& serial);
 
     void configSerial(int baudrate, HardwareSerial& name, int Rx, int Tx);
-    
+    String sendATCommand(const String &command, unsigned long timeout = 2000);
     void ConnectApn(String Id, String apn);
     void ApnVerify();
     bool waitForGPSFix(unsigned long timeout_ms);
