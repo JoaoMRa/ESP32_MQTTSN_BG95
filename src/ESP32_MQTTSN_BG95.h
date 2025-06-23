@@ -23,7 +23,7 @@ class ESP32_MQTTSN_BG95 {
     ESP32_MQTTSN_BG95(HardwareSerial& serial);
 
     void configSerial(int baudrate, HardwareSerial& name, int Rx, int Tx);
-    String sendATCommand("AT+QMTSNOPEN=1,\"ip\",1884,\"client\"");
+    String sendATCommand(const String &command, unsigned long timeout = 2000);
 
     String sendATCommand(const String &command, const String &payload, unsigned long timeout = 2000);
 
