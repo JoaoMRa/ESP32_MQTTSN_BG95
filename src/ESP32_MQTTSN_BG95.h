@@ -44,7 +44,7 @@ class ESP32_MQTTSN_BG95 {
     void DesactivateGps();
     void GpsCordinates();
     
-    void publish(String message, String clientId, String topic, String msgId, String qos, String retain, String msglen);
+    void publish(String message, String clientId, String topic, String msgId, String qos, String retain);
     void Subscribe(String clientId, String msgId, String topic, String qos);
     void Unsubscribe(String clientId, String msgId, String topic);
     void RequestTopicId();
