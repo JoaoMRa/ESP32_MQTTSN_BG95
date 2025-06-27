@@ -1,4 +1,4 @@
-#include "ESP32_MQTTSN_BG95.h"More actions
+#include "ESP32_MQTTSN_BG95.h"
 
 ESP32_MQTTSN_BG95::ESP32_MQTTSN_BG95(HardwareSerial& serial) : bg95Serial(serial) {}
 //Configure Serial
