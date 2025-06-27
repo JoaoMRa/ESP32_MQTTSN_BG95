@@ -7,24 +7,38 @@ void ESP32_MQTTSN_BG95::configSerial(int baudrate, HardwareSerial& name, int Rx,
     name.begin(baudrate, SERIAL_8N1, Rx, Tx);
 }
 //Send AT Commands
-String ESP32_MQTTSN_BG95::sendATCommand(const String &command, unsigned long timeout) {
+String ESP32_MQTTSN_BG95::sendATCommand(const String &command, const String &expectedResponse, unsigned long timeout) {
     String response = "";
+    bool okRecebido = false;
+    bool esperadoRecebido = false;
+
     bg95Serial.print(command);
     bg95Serial.print("\r");
 
     unsigned long start = millis();
+
     while (millis() - start < timeout) {
         while (bg95Serial.available()) {
             char c = bg95Serial.read();
             response += c;
 
-            // Se a resposta contiver OK ou ERROR, podemos sair mais cedo
-            if (response.indexOf("OK") != -1 || response.indexOf("ERROR") != -1) {
-                delay(50); // pequena margem para ler mais bytes
+            if (!okRecebido && response.indexOf("OK") != -1) {
+                okRecebido = true;
+                Serial.println("[OK] Recebido");
+            }
+
+            if (!esperadoRecebido && expectedResponse.length() > 0 && response.indexOf(expectedResponse) != -1) {
+                esperadoRecebido = true;
+                Serial.println("[Esperado] Recebido: " + expectedResponse);
+            }
+
+            if ((okRecebido || response.indexOf("ERROR") != -1) &&
+                (expectedResponse == "" || esperadoRecebido)) {
+                delay(50);  // Garantir leitura de final da resposta
                 while (bg95Serial.available()) {
                     response += (char)bg95Serial.read();
                 }
-                goto end;  // break nested loops
+                goto end;
             }
         }
     }
@@ -35,49 +49,61 @@ end:
     return response;
 }
 
-String ESP32_MQTTSN_BG95::sendATCommand(const String &command, const String &payload, unsigned long timeout) {
+
+String ESP32_MQTTSN_BG95::sendATCommand(const String &command, const String &payload, const String &expectedResponse, unsigned long timeout) {
     String response = "";
 
     // Enviar comando
     bg95Serial.print(command);
     bg95Serial.print("\r");
-    delay(100); // Pequeno atraso para garantir que o módulo esteja pronto para receber o payload
+    delay(100); // Espera antes de enviar o payload
 
-    // Enviar o payload
-    bg95Serial.print(payload);
-    bg95Serial.write(0x1A); // Ctrl+Z indica fim de payload
-    Serial.println("Enviado Ctrl+Z");
+    // Enviar payload (se houver)
+    if (payload.length() > 0) {
+        bg95Serial.print(payload);
+        bg95Serial.write(0x1A); // Ctrl+Z para finalizar o payload
+        Serial.println("Enviado Ctrl+Z");
+    }
 
     unsigned long start = millis();
-    bool respostaCompleta = false;
+    bool okRecebido = false;
+    bool esperadoRecebido = false;
 
     while (millis() - start < timeout) {
         while (bg95Serial.available()) {
             char c = bg95Serial.read();
             response += c;
 
-            // Verifica se resposta parece estar completa
-            if (response.indexOf("OK") != -1 || response.indexOf("ERROR") != -1) {
-                delay(50);  // Dar um tempo extra para garantir que tudo chegou
+            // Verifica se "OK" foi recebido
+            if (!okRecebido && response.indexOf("OK") != -1) {
+                okRecebido = true;
+                Serial.println("[OK] Recebido");
+            }
+
+            // Verifica se resposta esperada foi recebida
+            if (!esperadoRecebido && expectedResponse.length() > 0 && response.indexOf(expectedResponse) != -1) {
+                esperadoRecebido = true;
+                Serial.println("[Esperado] Recebido: " + expectedResponse);
+            }
+
+            // Se ambas as condições forem satisfeitas, podemos sair
+            if (okRecebido && (expectedResponse == "" || esperadoRecebido)) {
+                delay(50); // Pequeno buffer para garantir que chegou tudo
                 while (bg95Serial.available()) {
                     response += (char)bg95Serial.read();
                 }
-                respostaCompleta = true;
-                break;
+                goto end;
             }
-        }
-
-        if (respostaCompleta) {
-            break;
         }
     }
 
+end:
     Serial.println("Comando: " + command);
-    Serial.println("Payload: " + payload);
+    if (payload.length() > 0) Serial.println("Payload: " + payload);
     Serial.println("Resposta: " + response);
-
     return response;
 }
+
 
 
 
