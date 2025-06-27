@@ -15,10 +15,21 @@ String ESP32_MQTTSN_BG95::sendATCommand(const String &command, unsigned long tim
     unsigned long start = millis();
     while (millis() - start < timeout) {
         while (bg95Serial.available()) {
-            response += (char)bg95Serial.read();
+            char c = bg95Serial.read();
+            response += c;
+
+            // Se a resposta contiver OK ou ERROR, podemos sair mais cedo
+            if (response.indexOf("OK") != -1 || response.indexOf("ERROR") != -1) {
+                delay(50); // pequena margem para ler mais bytes
+                while (bg95Serial.available()) {
+                    response += (char)bg95Serial.read();
+                }
+                goto end;  // break nested loops
+            }
         }
     }
 
+end:
     Serial.println("Comando: " + command);
     Serial.println("Resposta: " + response);
     return response;
@@ -27,19 +38,37 @@ String ESP32_MQTTSN_BG95::sendATCommand(const String &command, unsigned long tim
 String ESP32_MQTTSN_BG95::sendATCommand(const String &command, const String &payload, unsigned long timeout) {
     String response = "";
 
+    // Enviar comando
     bg95Serial.print(command);
     bg95Serial.print("\r");
-
-    delay(100); // Pequena espera para o módulo aceitar o payload
+    delay(100); // Pequeno atraso para garantir que o módulo esteja pronto para receber o payload
 
     // Enviar o payload
     bg95Serial.print(payload);
-    bg95Serial.write(0x1A); // Envia Ctrl+Z
+    bg95Serial.write(0x1A); // Ctrl+Z indica fim de payload
+    Serial.println("Enviado Ctrl+Z");
 
     unsigned long start = millis();
+    bool respostaCompleta = false;
+
     while (millis() - start < timeout) {
         while (bg95Serial.available()) {
-            response += (char)bg95Serial.read();
+            char c = bg95Serial.read();
+            response += c;
+
+            // Verifica se resposta parece estar completa
+            if (response.indexOf("OK") != -1 || response.indexOf("ERROR") != -1) {
+                delay(50);  // Dar um tempo extra para garantir que tudo chegou
+                while (bg95Serial.available()) {
+                    response += (char)bg95Serial.read();
+                }
+                respostaCompleta = true;
+                break;
+            }
+        }
+
+        if (respostaCompleta) {
+            break;
         }
     }
 
@@ -49,6 +78,7 @@ String ESP32_MQTTSN_BG95::sendATCommand(const String &command, const String &pay
 
     return response;
 }
+
 
 
 // Connect Apn
