@@ -1,4 +1,4 @@
-#include "ESP32_MQTTSN_BG95.h"
+#include "ESP32_MQTTSN_BG95.h"More actions
 
 ESP32_MQTTSN_BG95::ESP32_MQTTSN_BG95(HardwareSerial& serial) : bg95Serial(serial) {}
 //Configure Serial
@@ -7,104 +7,48 @@ void ESP32_MQTTSN_BG95::configSerial(int baudrate, HardwareSerial& name, int Rx,
     name.begin(baudrate, SERIAL_8N1, Rx, Tx);
 }
 //Send AT Commands
-String ESP32_MQTTSN_BG95::sendATCommand(const String &command, const String &expectedResponse, unsigned long timeout) {
+String ESP32_MQTTSN_BG95::sendATCommand(const String &command, unsigned long timeout) {
     String response = "";
-    bool okRecebido = false;
-    bool esperadoRecebido = false;
-
     bg95Serial.print(command);
     bg95Serial.print("\r");
 
     unsigned long start = millis();
-
     while (millis() - start < timeout) {
         while (bg95Serial.available()) {
-            char c = bg95Serial.read();
-            response += c;
-
-            if (!okRecebido && response.indexOf("OK") != -1) {
-                okRecebido = true;
-                Serial.println("[OK] Recebido");
-            }
-
-            if (!esperadoRecebido && expectedResponse.length() > 0 && response.indexOf(expectedResponse) != -1) {
-                esperadoRecebido = true;
-                Serial.println("[Esperado] Recebido: " + expectedResponse);
-            }
-
-            if ((okRecebido || response.indexOf("ERROR") != -1) &&
-                (expectedResponse == "" || esperadoRecebido)) {
-                delay(50);  // Garantir leitura de final da resposta
-                while (bg95Serial.available()) {
-                    response += (char)bg95Serial.read();
-                }
-                goto end;
-            }
+            response += (char)bg95Serial.read();
         }
     }
 
-end:
     Serial.println("Comando: " + command);
     Serial.println("Resposta: " + response);
     return response;
 }
 
-
-String ESP32_MQTTSN_BG95::sendATCommand(const String &command, const String &payload, const String &expectedResponse, unsigned long timeout) {
+String ESP32_MQTTSN_BG95::sendATCommand(const String &command, const String &payload, unsigned long timeout) {
     String response = "";
 
-    // Enviar comando
     bg95Serial.print(command);
     bg95Serial.print("\r");
-    delay(100); // Espera antes de enviar o payload
 
-    // Enviar payload (se houver)
-    if (payload.length() > 0) {
-        bg95Serial.print(payload);
-        bg95Serial.write(0x1A); // Ctrl+Z para finalizar o payload
-        Serial.println("Enviado Ctrl+Z");
-    }
+    delay(100); // Pequena espera para o módulo aceitar o payload
+
+    // Enviar o payload
+    bg95Serial.print(payload);
+    bg95Serial.write(0x1A); // Envia Ctrl+Z
 
     unsigned long start = millis();
-    bool okRecebido = false;
-    bool esperadoRecebido = false;
-
     while (millis() - start < timeout) {
         while (bg95Serial.available()) {
-            char c = bg95Serial.read();
-            response += c;
-
-            // Verifica se "OK" foi recebido
-            if (!okRecebido && response.indexOf("OK") != -1) {
-                okRecebido = true;
-                Serial.println("[OK] Recebido");
-            }
-
-            // Verifica se resposta esperada foi recebida
-            if (!esperadoRecebido && expectedResponse.length() > 0 && response.indexOf(expectedResponse) != -1) {
-                esperadoRecebido = true;
-                Serial.println("[Esperado] Recebido: " + expectedResponse);
-            }
-
-            // Se ambas as condições forem satisfeitas, podemos sair
-            if (okRecebido && (expectedResponse == "" || esperadoRecebido)) {
-                delay(50); // Pequeno buffer para garantir que chegou tudo
-                while (bg95Serial.available()) {
-                    response += (char)bg95Serial.read();
-                }
-                goto end;
-            }
+            response += (char)bg95Serial.read();
         }
     }
 
-end:
     Serial.println("Comando: " + command);
-    if (payload.length() > 0) Serial.println("Payload: " + payload);
+    Serial.println("Payload: " + payload);
     Serial.println("Resposta: " + response);
+
     return response;
 }
-
-
 
 
 // Connect Apn
@@ -167,7 +111,7 @@ void ESP32_MQTTSN_BG95::ConfNTN(String Id, String apn){
     sendATCommand("at+qiact=1");
     sendATCommand("at+qiact?");
     sendATCommand("AT+QMTSNCFG=\"timeout\",1,60,3,1");
-  
+
 }
 
 
@@ -233,7 +177,8 @@ void ESP32_MQTTSN_BG95::publish(String message, String clientId, String topic, S
     int msglen = message.length();  // Calcula o comprimento da mensagem
 
     String Command("AT+QMTSNPUB=" + clientId + "," + msgId + "," + qos + "," + retain + ",\"" + topic + "\"," + String(msglen));
-    sendATCommand(Command, message, "+QMTSNRECV");
+    sendATCommand(atCommand, message);
+    sendATCommand(Command, message);
 }
 
 // Subscrive MQTT-SN topic
@@ -281,7 +226,7 @@ void ESP32_MQTTSN_BG95::parse_command_line(String& response) {
         response.trim();
     }
 
-  
+
 }
 
 bool ESP32_MQTTSN_BG95::check_command(String command, String result, uint32_t wait){
@@ -306,9 +251,9 @@ bool ESP32_MQTTSN_BG95::check_command(String command, String result, uint32_t wa
         {
             break;
         }
-        
+
         delay(2000);
-        
+
     }
     return expect_response;
 }
@@ -336,4 +281,3 @@ bool ESP32_MQTTSN_BG95::waitForResponse(String expected, unsigned long timeout) 
   Serial.println("\nTimeout à espera de: " + expected);
   return false;
 }
-
