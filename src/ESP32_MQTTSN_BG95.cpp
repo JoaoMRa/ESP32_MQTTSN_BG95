@@ -321,8 +321,8 @@ String ESP32_MQTTSN_BG95::readUntil(const String& keyword, unsigned long timeout
   unsigned long startTime = millis();
   
   while (millis() - startTime < timeout) {
-    while (bg95Serial->available()) {
-      char c = bg95Serial->read();
+    while (bg95Serial.available()) {
+      char c = bg95Serial.read();
       response += c;
 
       if (response.indexOf(keyword) != -1) {
