@@ -316,3 +316,22 @@ bool ESP32_MQTTSN_BG95::getValidGPSCoordinates(String &latitude, String &longitu
     return false;
 }
 
+String ESP32_MQTTSN_BG95::readUntil(const String& keyword, unsigned long timeout) {
+  String response = "";
+  unsigned long startTime = millis();
+  
+  while (millis() - startTime < timeout) {
+    while (_serial->available()) {
+      char c = _serial->read();
+      response += c;
+
+      if (response.indexOf(keyword) != -1) {
+        return response;
+      }
+    }
+  }
+
+  return response;  // Retorna o que recebeu, mesmo que incompleto
+}
+
+
