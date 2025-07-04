@@ -281,3 +281,38 @@ bool ESP32_MQTTSN_BG95::waitForResponse(String expected, unsigned long timeout) 
   Serial.println("\nTimeout à espera de: " + expected);
   return false;
 }
+
+bool ESP32_MQTTSN_BG95::getValidGPSCoordinates(String &latitude, String &longitude, int maxAttempts) {
+    for (int i = 0; i < maxAttempts; i++) {
+        Serial.println("Tentativa de obter coordenadas GPS válida...");
+
+        String response = sendATCommand("AT+QGPSLOC?", 5000);
+
+        int index = response.indexOf("+QGPSLOC:");
+        if (index != -1 && response.indexOf("516") == -1) {
+            // Encontrou uma resposta válida
+            String data = response.substring(index + 10);
+            data.trim();
+
+            int firstComma = data.indexOf(',');
+            if (firstComma != -1) {
+                latitude = data.substring(0, firstComma);
+                int secondComma = data.indexOf(',', firstComma + 1);
+                if (secondComma != -1) {
+                    longitude = data.substring(firstComma + 1, secondComma);
+                    Serial.println("Coordenadas GPS obtidas com sucesso:");
+                    Serial.println("Latitude: " + latitude);
+                    Serial.println("Longitude: " + longitude);
+                    return true;
+                }
+            }
+        }
+
+        Serial.println("Resposta inválida. Repetindo tentativa...");
+        delay(2000); // Aguarda antes de tentar novamente
+    }
+
+    Serial.println("Falha ao obter coordenadas GPS após " + String(maxAttempts) + " tentativas.");
+    return false;
+}
+
