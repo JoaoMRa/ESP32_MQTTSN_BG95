@@ -60,6 +60,7 @@ class ESP32_MQTTSN_BG95 {
     void parse_command_line(String& response);
     bool check_command(String command, String result, uint32_t wait);
     bool waitForResponse(String expected, unsigned long timeout = 5000);
+    bool getValidGPSCoordinates(String &latitude, String &longitude, int maxAttempts);
       
 };
 
