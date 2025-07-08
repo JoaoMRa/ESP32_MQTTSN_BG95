@@ -105,10 +105,12 @@ void ESP32_MQTTSN_BG95::ConfNTN(String Id, String apn){
     sendATCommand("AT+CGDCONT=" + Id + ",\"IP\",\"" + apn + "\"");
     sendATCommand("at+cfun=1");
     sendATCommand("at+cereg=4");
+    delay(10000); 
     sendATCommand("at+qeng=\"servingcell\"");
     sendATCommand("at+qnwinfo");
     sendATCommand("at+cops?");
     sendATCommand("at+qiact=1");
+    delay(30000); 
     sendATCommand("at+qiact?");
     sendATCommand("AT+QMTSNCFG=\"timeout\",1,60,3,1");
 
