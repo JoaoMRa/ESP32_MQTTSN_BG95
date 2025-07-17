@@ -10,7 +10,7 @@ void ESP32_MQTTSN_BG95::configSerial(int baudrate, HardwareSerial& name, int Rx,
 String ESP32_MQTTSN_BG95::sendATCommand(const String &command, unsigned long timeout) {
     String response = "";
     bg95Serial.print(command);
-    bg95Serial.print("\r");
+    bg95Serial.print("\r\n");
 
     unsigned long start = millis();
     while (millis() - start < timeout) {
@@ -28,7 +28,7 @@ String ESP32_MQTTSN_BG95::sendATCommand(const String &command, const String &pay
     String response = "";
 
     bg95Serial.print(command);
-    bg95Serial.print("\r");
+    bg95Serial.print("\r\n");
 
     delay(100); // Pequena espera para o módulo aceitar o payload
 
