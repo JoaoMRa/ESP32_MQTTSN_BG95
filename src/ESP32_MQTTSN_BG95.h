@@ -38,7 +38,7 @@ class ESP32_MQTTSN_BG95 {
     void BrokerVerify();
     void CloseBroker();
     
-    void connectMQTTSN(String clientId, String user, String pass);
+    void connectMQTTSN(int client_idx, String clientId, String user, String pass);
     void MQTTSNVerify();
     void CloseMQTTSN(String clientId);
     
