@@ -137,11 +137,12 @@ void ESP32_MQTTSN_BG95::CloseBroker() {
 }
 
 // Connect to MQTT-SN
-void ESP32_MQTTSN_BG95::connectMQTTSN(String clientId, String user, String pass) {
+void ESP32_MQTTSN_BG95::connectMQTTSN(int client_idx, String clientId, String user, String pass) {
     this->user = user;
     this->pass = pass;
-    sendATCommand("AT+QMTCONN=\"" + clientId + "\",\"" + user + "\",\"" + pass + "\"");
+    sendATCommand("AT+QMTCONN=" + String(client_idx) + ",\"" + clientId + "\",\"" + user + "\",\"" + pass + "\"");
 }
+
 
 // show MQTT-SN state
 void ESP32_MQTTSN_BG95::MQTTSNVerify() {
